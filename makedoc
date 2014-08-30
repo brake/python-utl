@@ -1,0 +1,8 @@
+pdoc utl >README.md
+pdoc utl.file >>README.md
+pdoc utl.hex >>README.md
+pdoc utl.simstore >>README.md
+pdoc utl.version >>README.md
+pdoc utl.wx_ >>README.md
+pdoc utl.misc >>README.md
+pdoc utl.text >>README.md
