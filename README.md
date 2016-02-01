@@ -8,7 +8,6 @@ Utilities I use in many of my projects
 - utl.file
 - utl.hex
 - utl.misc
-- utl.simstore
 - utl.text
 - utl.version
 - utl.wx_
