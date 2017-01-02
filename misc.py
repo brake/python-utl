@@ -1,21 +1,42 @@
-# -*- coding: UTF-8 -*-
-#-------------------------------------------------------------------------------
-# Name:    misc.py        
-# Package: utl
-# Project: utl     
-#
-# Created: 28.08.14 18:13    
-# Copyright:  (c) Constantin Roganov, 2014 
-# Licence:    The MIT License
-#-------------------------------------------------------------------------------
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# ------------------------------------------------------------------------------
+# Name:    misc.py
+# Package: utl
+# Project: utl
+#
+# Created: 28.08.14 18:13
+# Copyright 2014-2016 © Constantin Roganov
+# License: The MIT License
+# ------------------------------------------------------------------------------
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ------------------------------------------------------------------------------
+
 
 """Uncategorized utilities"""
 
-__author__ = 'Constantin Roganov'
+from __future__ import unicode_literals, absolute_import
 
 import collections
-import contextlib as cont
+import contextlib
+
+__author__ = 'Constantin Roganov'
 
 
 def flatten(iterable):
@@ -40,7 +61,7 @@ def flatten(iterable):
             yield e
 
 
-@cont.contextmanager
+@contextlib.contextmanager
 def ignored(*exceptions):
     """Create context manager ignoring exceptions from input sequence
 
@@ -49,10 +70,10 @@ def ignored(*exceptions):
 
 
     >>> with ignored(ValueError):
-    ...     'aaa' / 4
+    ...     'aaa' / 4                       # doctest: +ELLIPSIS
     Traceback (most recent call last):
     ...
-    TypeError: unsupported operand type(s) for /: 'str' and 'int'
+    TypeError: unsupported operand type(s) ...
 
     """
     try:
