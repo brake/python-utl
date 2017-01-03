@@ -1,14 +1,33 @@
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Name:    version.py
 # Package: utl
 # Project: utl
 #
 # Created: 24.03.14 17:50
-# Copyright:  (c) Constantin Roganov, 2014
-# Licence:    The MIT License
-#-------------------------------------------------------------------------------
-#!/usr/bin/env python
+# Copyright 2014-2016 © Constantin Roganov
+# License: The MIT License
+# ------------------------------------------------------------------------------
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ------------------------------------------------------------------------------
+
 
 """Application version management.
 
@@ -38,13 +57,16 @@ Usage:
 
 """
 
-__author__ = 'Constantin Roganov'
+from __future__ import unicode_literals
+from builtins import *
 
 import itertools
 
 from . import file as file_
 from . import text
 from . import misc
+
+__author__ = 'Constantin Roganov'
 
 _MAIN_VERSION_FILE = 'main_version.txt'
 _FULL_VERSION_FILE = 'app_version.py'
@@ -56,7 +78,7 @@ _VARIABLE_SEP = '='
 _VERSION_SEP = '.'
 
 
-def _read_from_file(name):
+def _read_single_line_from_file(name):
     with file_.text_file(name) as fo:
         for line in itertools.dropwhile(lambda s: not s, text.lines_uncommented(text.lines_stripped(fo))):
             return line
@@ -86,7 +108,7 @@ def _get_main_version():
     version = _DEFAULT_MAIN_VERSION
 
     try:
-        version = _read_from_file(_MAIN_VERSION_FILE)
+        version = _read_single_line_from_file(_MAIN_VERSION_FILE)
 
     except IOError:
         with file_.writable_text_file(_MAIN_VERSION_FILE) as fo:
@@ -104,7 +126,7 @@ def _get_new_build_number():
     get_build_num = lambda v: v.split(_VARIABLE_SEP)[1].strip("'").split(_VERSION_SEP)[2]
 
     with misc.ignored(IOError):
-        version = _read_from_file(_FULL_VERSION_FILE)
+        version = _read_single_line_from_file(_FULL_VERSION_FILE)
         if version and _VARIABLE_SEP in version:
             build = int(get_build_num(version))
             if build > _MAX_BUILD:
@@ -132,7 +154,7 @@ def get_current_version():
     """
 
     try:
-        version = _read_from_file(_FULL_VERSION_FILE)
+        version = _read_single_line_from_file(_FULL_VERSION_FILE)
         if version:
             if _VARIABLE_SEP in version:
                 return version.split(_VARIABLE_SEP)[1].strip()
@@ -141,6 +163,5 @@ def get_current_version():
 
     except IOError:
         return get_new_version()
-
 
 
