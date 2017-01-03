@@ -4,12 +4,12 @@ Utilities I use in many of my projects.
 
 ## Sub-modules
 
-  * [utl.file](#utl.file)
-  * [utl.hex](#utl.hex)
-  * [utl.misc](#utl.misc)
-  * [utl.version](#utl.version)
-  * [utl.wx_](#utl.wx_)
-  * [utl.text](#utl.text)
+  * [utl.file](#utlfile)
+  * [utl.hex](#utlhex)
+  * [utl.misc](#utlmisc)
+  * [utl.version](#utlversion)
+  * [utl.wx_](#utlwx_)
+  * [utl.text](#utltext)
     
 ## utl.file
 
