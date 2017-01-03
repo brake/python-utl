@@ -1,7 +1,6 @@
 # Package `utl`
 
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat 
-        :target: https://opensource.org/licenses/MIT
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 Utilities I use in many of my projects.
 
