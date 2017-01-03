@@ -13,16 +13,7 @@ Utilities I use in many of my projects.
     
 ## utl.file
 
-<<<<<<< HEAD
 File related utilities
-=======
-- utl.file
-- utl.hex
-- utl.misc
-- utl.text
-- utl.version
-- utl.wx_
->>>>>>> 0e925ca3e298f5a9b0ef0f363415d18d51f4de8e
 
 ### utl.file Functions
 
@@ -44,14 +35,14 @@ File related utilities
  * `parse_line` - callable for processing of single line
  * `progress_co` - coroutine with API like below:
  
- ```python
-     progress_co = progress_generator()
-     progress_co.send((filename, lines_read, lines_total, lines_processed))
-     ...
-     progress_co.send(lines_saved)  # finalizing work
-```
+   ```python
+   progress_co = progress_generator()
+   progress_co.send((filename, lines_read, lines_total, lines_processed))
+   ...
+   progress_co.send(lines_saved)  # finalizing work
+   ```
 
-Generates output data in format produced by parse_line()
+   Generates output data in format produced by `parse_line()`
 
 `offset_iter(fd)` Generator of pairs (offset_from_beginning_of_file, string) for file object 'fd'.
 
@@ -141,7 +132,7 @@ Uncategorized utilities.
 **Examples**:
 
 ```python
-[1, 2, 3, 4, [[[5, 6], 7]], 8, [9]] -> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[1, 2, 3, 4, [[[5, 6], 7]], 8, [9]] ➔ [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 >>> list(flatten([1, 2, 3, 4, [[[5, 6], 7]], 8, [9]]))
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -299,7 +290,7 @@ Generator of pairs:
 [(ParseStats(read=1, processed=1), False), (ParseStats(read=2, processed=2), True), (ParseStats(read=4, processed=3), True)]
 ```
 
-'lines_stripped(iterable, chars=None)` Return Iterable object containing lines from input iterable with strip(chars) applied.
+`lines_stripped(iterable, chars=None)` Return Iterable object containing lines from input iterable with strip(chars) applied.
 
 **Examples**:
 ```python
@@ -337,9 +328,3 @@ file.txt 3/7 (processed: 1)  Lines saved: 100
      Done!
 another_file.txt 0/10 (processed: 0)  Lines saved: 100
 ```
-
-<<<<<<< HEAD
-=======
-    >>> id(a1) == id(a2)
-    True
->>>>>>> 0e925ca3e298f5a9b0ef0f363415d18d51f4de8e
