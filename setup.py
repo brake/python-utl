@@ -41,8 +41,8 @@ install_requires = ['future >= 0.16.0'] if sys.version_info[0] == 2 else []
 setup(
     name='utl',
     version=__version__,
-    packages=find_packages(),
-    py_modules=['text', 'file', 'wx_', 'hex', 'misc', 'version'],
+    packages=[utl],
+#    py_modules=['text', 'file', 'wx_', 'hex', 'misc', 'version'],
     install_requires=install_requires,
     author=__author__,
     author_email='rccbox at gmail dot com',
