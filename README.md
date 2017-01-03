@@ -13,7 +13,16 @@ Utilities I use in many of my projects.
     
 ## utl.file
 
+<<<<<<< HEAD
 File related utilities
+=======
+- utl.file
+- utl.hex
+- utl.misc
+- utl.text
+- utl.version
+- utl.wx_
+>>>>>>> 0e925ca3e298f5a9b0ef0f363415d18d51f4de8e
 
 ### utl.file Functions
 
@@ -329,3 +338,8 @@ file.txt 3/7 (processed: 1)  Lines saved: 100
 another_file.txt 0/10 (processed: 0)  Lines saved: 100
 ```
 
+<<<<<<< HEAD
+=======
+    >>> id(a1) == id(a2)
+    True
+>>>>>>> 0e925ca3e298f5a9b0ef0f363415d18d51f4de8e
