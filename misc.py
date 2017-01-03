@@ -35,6 +35,7 @@ from __future__ import unicode_literals, absolute_import
 
 import collections
 import contextlib
+import sys
 
 __author__ = 'Constantin Roganov'
 
@@ -61,25 +62,27 @@ def flatten(iterable):
             yield e
 
 
-@contextlib.contextmanager
-def ignored(*exceptions):
-    """Create context manager ignoring exceptions from input sequence
+if sys.version_info[0] == 2:
 
-    >>> with ignored(TypeError):
-    ...     'aaa' / 4
+    @contextlib.contextmanager
+    def ignored(*exceptions):
+        """Create context manager ignoring exceptions from input sequence
+
+        >>> with ignored(TypeError):
+        ...     'aaa' / 4
 
 
-    >>> with ignored(ValueError):
-    ...     'aaa' / 4                       # doctest: +ELLIPSIS
-    Traceback (most recent call last):
-    ...
-    TypeError: unsupported operand type(s) ...
+        >>> with ignored(ValueError):
+        ...     'aaa' / 4                       # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        TypeError: unsupported operand type(s) ...
 
-    """
-    try:
-        yield
-    except exceptions:
-        pass
+        """
+        try:
+            yield
+        except exceptions:
+            pass
 
 
 class Singleton(type):
