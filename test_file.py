@@ -36,9 +36,6 @@ be executed directly.
 from __future__ import absolute_import
 
 import doctest
-import sys
-sys.path.append('..')
-
 import utl.file
 
 doctest.testmod(utl.file)
