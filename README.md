@@ -1,8 +1,20 @@
 # Package `utl`
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT) ![Python versions](https://img.shields.io/badge/Python-2.7,_3.x-green.svg?style=flat)
 
-Utilities I use in many of my projects.
+Utilities I'm using in many of my projects.
+
+## Installation
+
+`pip install git+https://github.com/brake/python-utl#egg=utl`
+
+or
+
+```
+git clone https://github.com/brake/python-utl
+cd python-utl
+python setup.py install
+```
 
 ## Sub-modules
 
