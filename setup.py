@@ -41,6 +41,7 @@ install_requires = ['future >= 0.16.0'] if sys.version_info[0] == 2 else []
 setup(
     name='utl',
     version=__version__,
+    provides=['utl'],
     packages=find_packages(),
     zip_safe=True,
     py_modules=['text', 'file', 'wx_', 'hex', 'misc', 'version'],
