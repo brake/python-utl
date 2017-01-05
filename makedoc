@@ -1,8 +1,0 @@
-cd ..
-pdoc utl >utl/README.md
-pdoc utl.file >>utl/README.md
-pdoc utl.hex >>utl/README.md
-pdoc utl.version >>utl/README.md
-pdoc utl.wx_ >>utl/README.md
-pdoc utl.misc >>utl/README.md
-pdoc utl.text >>utl/README.md
