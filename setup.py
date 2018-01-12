@@ -33,7 +33,7 @@ from setuptools import setup, find_packages
 import sys
 
 __author__ = 'Constantin Roganov'
-__version__ = '0.1.0'
+__version__ = '1.0.1'
 
 install_requires = ['future >= 0.16.0'] if sys.version_info[0] == 2 else []
 
