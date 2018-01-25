@@ -6,7 +6,9 @@ Utilities I'm using in many of my projects.
 
 ## Installation
 
-`pip install git+https://github.com/brake/python-utl#egg=utl`
+Python 2: `pip install git+https://github.com/brake/python-utl@1.0.1#egg=utl`
+
+Python 3: `pip install git+https://github.com/brake/python-utl@2.0.0#egg=utl`
 
 or
 
@@ -18,18 +20,18 @@ python setup.py install
 
 ## Sub-modules
 
-  * [utl.file](#utlfile)
+  * [utl.files](#utlfiles)
   * [utl.hex](#utlhex)
   * [utl.misc](#utlmisc)
   * [utl.version](#utlversion)
   * [utl.wx_](#utlwx_)
   * [utl.text](#utltext)
     
-## utl.file
+## utl.files
 
 File related utilities
 
-### utl.file Functions
+### utl.files Functions
 
 `binary_file(name, *args, **kwargs)` Open file in binary mode for reading
 
