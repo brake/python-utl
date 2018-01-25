@@ -61,10 +61,15 @@ from __future__ import unicode_literals
 from builtins import *
 
 import itertools
+import sys
 
-from .file import text_file, writable_text_file
-from . import text
-from . import misc
+from .files import text_file, writable_text_file
+from .text import lines_stripped, lines_uncommented
+
+if sys.version_info[0] == 2:
+    from .misc import ignored as suppress
+else:
+    from contextlib import suppress
 
 __author__ = 'Constantin Roganov'
 
@@ -76,11 +81,12 @@ _MAX_MAJOR = 255
 _MAX_MINOR = _MAX_MAJOR
 _VARIABLE_SEP = '='
 _VERSION_SEP = '.'
+_SINGLE_QUOTE = " '"
 
 
 def _read_single_line_from_file(name):
     with text_file(name) as fo:
-        for line in itertools.dropwhile(lambda s: not s, text.lines_uncommented(text.lines_stripped(fo))):
+        for line in itertools.dropwhile(lambda s: not s, lines_uncommented(lines_stripped(fo))):
             return line
 
 
@@ -125,7 +131,7 @@ def _get_new_build_number():
 
     get_build_num = lambda v: v.split(_VARIABLE_SEP)[1].strip("'").split(_VERSION_SEP)[2]
 
-    with misc.ignored(IOError):
+    with suppress(IOError):
         version = _read_single_line_from_file(_FULL_VERSION_FILE)
         if version and _VARIABLE_SEP in version:
             build = int(get_build_num(version))
@@ -157,9 +163,9 @@ def get_current_version():
         version = _read_single_line_from_file(_FULL_VERSION_FILE)
         if version:
             if _VARIABLE_SEP in version:
-                return version.split(_VARIABLE_SEP)[1].strip()
+                return version.split(_VARIABLE_SEP)[1].strip(_SINGLE_QUOTE)
             else:
-                return version.strip()
+                return version.strip(_SINGLE_QUOTE)
 
     except IOError:
         return get_new_version()

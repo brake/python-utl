@@ -35,92 +35,42 @@
 from __future__ import unicode_literals, absolute_import
 from builtins import *
 
-from binascii import hexlify, unhexlify
+from binascii import hexlify, unhexlify, Error
 
 
 __author__ = 'Constantin Roganov'
 
 
 def hexstr2bytes_list(hexstr):
-    """Convert the hex string to list of bytes.
-
-    >>> hexstr2bytes_list('')
-    Traceback (most recent call last):
-    ...
-    TypeError: hexstr2bytes_list: input must be a hex string, '' received
-
-    >>> hexstr2bytes_list(None)
-    Traceback (most recent call last):
-    ...
-    TypeError: hexstr2bytes_list: input must be a hex string, 'None' received
-
-    >>> hexstr2bytes_list('DDFFAA33')
-    [221, 255, 170, 51]
-
-    >>> hexstr2bytes_list('DDFFAA3')
-    Traceback (most recent call last):
-    ...
-    TypeError: Odd-length string
-
-    """
+    """Convert the hex string to list of bytes"""
     if not hexstr:
         raise TypeError("hexstr2bytes_list: input must be a hex string, '{}' received".format(hexstr))
-    return list(map(ord, unhexlify(hexstr)))
+    # python 2
+    # return list(map(ord, unhexlify(hexstr)))
+    return [i for i in unhexlify(hexstr)]
 
 
 def bytes_list2bin(bl):
-    r"""Convert list of bytes to binary string.
-
-    >>> bytes_list2bin([221, 255, 170, 51])
-    '\xdd\xff\xaa3'
-
-    >>> bytes_list2bin([221, 255, 1700, 51])  # doctest: +IGNORE_EXCEPTION_DETAIL
-    Traceback (most recent call last):
-    ...
-    UnicodeEncodeError: 'latin-1' codec can't encode character u'\u06a4' in position 0: ordinal not in range(256)
-
-    """
+    """Convert list of bytes to binary string"""
     return b''.join(chr(i).encode('latin-1') for i in bl)
 
 
 def bytes_list2hexstr(bl, uppercase=True):
-    """Convert list of bytes to hex string.
-
-    >>> bytes_list2hexstr([221, 255, 170, 51])
-    'DDFFAA33'
-
-    >>> bytes_list2hexstr([221, 255, 170, 51], True)
-    'DDFFAA33'
-
-    >>> bytes_list2hexstr([221, 255, 170, 51], False)
-    'ddffaa33'
-
-    >>> bytes_list2hexstr([221, 255, 1700, 51])  # doctest: +IGNORE_EXCEPTION_DETAIL
-    Traceback (most recent call last):
-    ...
-    UnicodeEncodeError: 'latin-1' codec can't encode character u'\u06a4' in position 0: ordinal not in range(256)
-
-    """
-    result = hexlify(bytes_list2bin(bl))
+    """Convert list of bytes to hex string"""
+    # python2
+    # result = hexlify(bytes_list2bin(bl))
+    result = bytes_list2bin(bl).hex()
 
     return result.upper() if uppercase else result
 
 
 def is_hexstr(s):
-    """Check a string s for presence a valid hexadecimal data.
-
-    >>> is_hexstr('ddffaa33')
-    True
-
-    >>> is_hexstr('failing_test')
-    False
-
-    """
+    """Check a string s for presence a valid hexadecimal data"""
     try:
         unhexlify(s)
         return True
 
-    except TypeError:
+    except (TypeError, Error):
         return False
 
 
@@ -128,16 +78,6 @@ def swap_nibbles(s):
     r"""Swap nibbles in a hex string.
     len(s) must be even otherwise ValueError will be raised.
 
-    >>> swap_nibbles('d1c1a1b1')
-    u'1d1c1a1b'
-
-    >>> swap_nibbles('d1c1a1b')
-    Traceback (most recent call last):
-    ...
-    ValueError: Odd-length string
-
-    >>> swap_nibbles('D1NX')
-    u'1DXN'
 
     """
     if len(s) % 2:
@@ -145,6 +85,3 @@ def swap_nibbles(s):
     return ''.join([y+x for x,y in zip(*[iter(s)] * 2)])
 
 
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()

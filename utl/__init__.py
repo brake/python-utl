@@ -30,7 +30,10 @@
 
 """Utilities I use in many of my projects"""
 
-from future.builtins.disabled import file
+import sys
+
+if sys.version_info[0] == 2:
+    from future.builtins.disabled import file
 
 __author__ = 'Constantin Roganov'
 

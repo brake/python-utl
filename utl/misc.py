@@ -45,14 +45,6 @@ def flatten(iterable):
 
     iterable can contain scalars and another iterables.
     [1, 2, 3, 4, [[[5, 6], 7]], 8, [9]] -> [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-    >>> list(flatten([1, 2, 3, 4, [[[5, 6], 7]], 8, [9]]))
-    [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-    >>> list(flatten(1))
-    Traceback (most recent call last):
-    ...
-    TypeError: 'int' object is not iterable
     """
     for e in iterable:
         if isinstance(e, collections.Iterable):
@@ -66,19 +58,7 @@ if sys.version_info[0] == 2:
 
     @contextlib.contextmanager
     def ignored(*exceptions):
-        """Create context manager ignoring exceptions from input sequence
-
-        >>> with ignored(TypeError):
-        ...     'aaa' / 4
-
-
-        >>> with ignored(ValueError):
-        ...     'aaa' / 4                       # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-        ...
-        TypeError: unsupported operand type(s) ...
-
-        """
+        """Create context manager ignoring exceptions from input sequence"""
         try:
             yield
         except exceptions:
@@ -86,18 +66,7 @@ if sys.version_info[0] == 2:
 
 
 class Singleton(type):
-    """Meta class for Singleton creation
-
-    >>> class A(object):
-    ...    __metaclass__ = Singleton
-
-    >>> a1 = A()
-
-    >>> a2 = A()
-
-    >>> id(a1) == id(a2)
-    True
-    """
+    """Meta class for Singleton creation"""
 
     _instances = {}
 
@@ -107,9 +76,5 @@ class Singleton(type):
 
         return cls._instances[cls]
 
-if __name__ == '__main__':
-
-    import doctest
-    doctest.testmod()
 
 

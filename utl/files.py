@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 # ------------------------------------------------------------------------------
-# Name:    file.py
+# Name:    files.py
 # Package: utl
 # Project: utl
 #
@@ -35,11 +35,10 @@ from __future__ import absolute_import, unicode_literals, print_function
 from builtins import *
 
 import os
-import os.path
 import fileinput
 import functools
 
-from . import text
+from .text import lines_parser, lines_stripped
 
 __author__ = 'Constantin Roganov'
 
@@ -61,95 +60,38 @@ utf8_bom_text_file.__doc__ = 'Open UTF8 text file with BOM for reading'
 
 
 def file_lines_count(filename):
-    r"""Count lines in a text file.
-
-    >>> file_name = 'LinesCountTest.txt'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name) as fd:
-    ...         for i in range(100):
-    ...             fd.write('LinesCountTest {:03d}\n'.format(i))
-    ...         fd.write('final line')
-    >>> create_test_file()
-    >>> file_lines_count(file_name)
-    101
-
-    >>> file_name = 'LinesCountTest.txt'
-    >>> from os import remove; remove(file_name)  # doctest: -SKIP
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name):
-    ...         pass
-    >>> create_test_file()
-    >>> file_lines_count(file_name)
-    0
-
-    >>> file_name = 'LinesCountTest.txt'
-    >>> from os import remove; remove(file_name)  # doctest: -SKIP
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name) as fd:
-    ...         fd.write('single test line')
-    >>> create_test_file()
-    >>> file_lines_count(file_name)
-    1
-
-    >>> file_name = 'LinesCountTest.txt'
-    >>> from os import remove; remove(file_name)  # doctest: -SKIP
-    """
+    """Count lines in a text file"""
 # source:
 #  http://stackoverflow.com/questions/845058/how-to-get-line-count-cheaply-in-python
 
-    f = open(filename)
-    lines = 0
-    buf_size = 1024 * 1024
-    read_f = f.read  # loop optimization
+    with open(filename) as fo:
+        lines = 0
+        buf_size = 1024 * 1024
+        read_f = fo.read  # loop optimization
 
-    file_has_data = False
+        file_has_data = False
 
-    buf = read_f(buf_size)
-    if buf:
-        file_has_data = True
-
-    while buf:
-        lines += buf.count('\n')
         buf = read_f(buf_size)
+        if buf:
+            file_has_data = True
 
-    # nonempty file has 1 line at least
-    if file_has_data:
-        lines += 1
+        while buf:
+            lines += buf.count('\n')
+            buf = read_f(buf_size)
+
+        # nonempty file has 1 line at least
+        if file_has_data:
+            lines += 1
 
     return lines
 
 
 def _reverse_blocks_generator(fd, block_size=4096):
-    r"""Return generator which reads file as series of blocks from the tail of file up to to head.
+    """Return generator which reads file as series of blocks from the tail of file up to to head.
 
     The data itself is in normal order, only the order of the blocks is reversed.
     ie. "hello world" -> ["ld","wor", "lo ", "hel"]
     Note that the file must be opened in binary mode.
-
-    >>> file_name = 'ReverseBlocksTest.txt'
-    >>> block_size = 4
-    >>> line = '111122223333444'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name, encoding='ascii') as fd:
-    ...         fd.write(line)
-    >>> create_test_file()
-    >>> with binary_file(file_name) as fd:
-    ...     list(_reverse_blocks_generator(fd, block_size))
-    ['444', '3333', '2222', '1111']
-
-    >>> file_name = 'ReverseBlocksTest.txt'
-    >>> line = '111122223333444'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name, encoding='ascii') as fd:
-    ...         fd.write(line)
-    >>> create_test_file()
-    >>> with text_file(file_name) as fd:
-    ...     list(_reverse_blocks_generator(fd))
-    Traceback (most recent call last):
-    ...
-    TypeError: File must be opened in binary mode
-
-    >>> from os import remove; remove(file_name)
     """
 # source:
 # http://cybervadim.blogspot.ru/2009/10/reverse-file-iterator-in-python.html
@@ -171,53 +113,18 @@ def _reverse_blocks_generator(fd, block_size=4096):
         yield fd.read(block_size)
 
 
-def reverse_lines(fd, keepends=False, block_size=4096):
-    r"""Iterate through the lines of a file in reverse order.
+def reverse_lines(fd, keepends=False, block_size=4096, encoding='ascii'):
+    """Iterate through the lines of a file in reverse order.
 
     If keepends is true, line endings are kept as part of the line.
     Return generator.
-
-    >>> file_name = 'ReverseLinesTest.txt'
-    >>> block_size = 4
-    >>> line = '1111\n2222\n3333\n444'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name, encoding='ascii') as fd:
-    ...         fd.write(line)
-    >>> create_test_file()
-    >>> with binary_file(file_name) as fd:
-    ...     list(reverse_lines(fd))
-    [u'444', u'3333', u'2222', u'1111']
-
-    >>> file_name = 'ReverseLinesTest.txt'
-    >>> line = '1111\n2222\n3333\n444'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name, encoding='ascii') as fd:
-    ...         fd.write(line)
-    >>> create_test_file()
-    >>> with binary_file(file_name) as fd:
-    ...     list(reverse_lines(fd, True, block_size=3))
-    [u'444', u'3333\n', u'2222\n', u'1111\n']
-
-    >>> from os import remove; remove(file_name)
-    >>> file_name = 'ReverseLinesTest.txt'
-    >>> line = '1111\n2222\n3333\n444'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name, encoding='ascii') as fd:
-    ...         fd.write(line)
-    >>> create_test_file()
-    >>> with text_file(file_name) as fd:
-    ...     list(reverse_lines(fd))
-    Traceback (most recent call last):
-    ...
-    TypeError: File must be opened in binary mode
-
-    >>> from os import remove; remove(file_name)    """
+    """
 # source:
 # http://cybervadim.blogspot.ru/2009/10/reverse-file-iterator-in-python.html
 
     buf = ''
     for block in _reverse_blocks_generator(fd, block_size):
-        buf = block + buf
+        buf = block.decode(encoding) + buf
         lines = buf.splitlines(keepends)
         # Return all lines except the first (since may be partial)
         if lines:
@@ -229,7 +136,7 @@ def reverse_lines(fd, keepends=False, block_size=4096):
 
 
 def filelist_processor(iterable, parse_line,  progress_co=None):
-    r"""Generator of parsed lines from each text file (path) in iterable.
+    """Generator of parsed lines from each text file (path) in iterable.
 
     iterable - sequence of file paths or None (there sys.argv[1:] will be used)
     parse_line - callable for processing of single line
@@ -240,29 +147,15 @@ def filelist_processor(iterable, parse_line,  progress_co=None):
         progress_co.send(lines_saved)  # finalizing work
 
     Generates output data in format produced by parse_line()
-
-    >>> name_template = 'filelist_proc_test{}.txt'
-    >>> files = [name_template.format(i) for i in range(2)]
-    >>> def create_file(name):
-    ...     with writable_text_file(name) as fd:
-    ...         for i in range(2):
-    ...             fd.write('{} {}\n'.format(name, i))
-    >>> for n in files:
-    ...     create_file(n)
-    >>> list(filelist_processor(files, lambda x: x))
-    ['filelist_proc_test0.txt 0', 'filelist_proc_test0.txt 1', 'filelist_proc_test1.txt 0', 'filelist_proc_test1.txt 1']
-    >>> from os import remove; [remove(n) for n in files]  # doctest: +ELLIPSIS
-    [...]
-
     """
 
-    files = None if iterable is None else text.lines_stripped(iterable)
+    files = None if iterable is None else lines_stripped(iterable)
 
     inp = fileinput.input(files=files)
 
     pth, name, lines_total = (None, ) * 3
 
-    for stats, data in text.lines_parser(text.lines_stripped(inp), parse_line):
+    for stats, data in lines_parser(lines_stripped(inp), parse_line):
         if inp.isfirstline() or inp.filename() != pth:
             pth = inp.filename()
             name = os.path.basename(pth)
@@ -278,20 +171,6 @@ def filelist_processor(iterable, parse_line,  progress_co=None):
 def offset_iter(fd):
     r"""Generator of pairs (offset_from_beginning_of_file, string) for file object 'fd'.
 
-    >>> file_name = 'OffserIterTest.txt'
-    >>> line = '1111\n2222\n3333\n444'
-    >>> def create_test_file():
-    ...     with writable_text_file(file_name, encoding='ascii') as fd:
-    ...         fd.write(line)
-    >>> create_test_file()
-    >>> from os import SEEK_SET
-    >>> with binary_file(file_name) as fd:
-    ...     offset, val = list(offset_iter(fd))[-1]
-    >>> with binary_file(file_name) as fd:
-    ...     _ = fd.seek(offset, SEEK_SET)
-    ...     fd.readline() == val
-    True
-    >>> from os import remove; remove(file_name)
 
     """
     # source: http://bytes.com/topic/python/answers/855199-file-tell-loop
